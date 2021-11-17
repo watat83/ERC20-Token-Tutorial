@@ -69,7 +69,7 @@ contract NzouaTokenSale {
     function endSale() public {
 
         // Require only admin can end the sale
-        require(msg.sender == admin, 'Only Admin can end the sale');
+        require(msg.sender == admin, 'Only Admin can end the sale.');
 
         // Transfer remaining tokens back to admin
         require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
