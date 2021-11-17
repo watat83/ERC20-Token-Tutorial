@@ -162,15 +162,6 @@ contract('NzouaToken', async (accounts) => {
         allowanceAmount = await token.allowance(fromAccount, spendingAccount)
         assert.equal(allowanceAmount.toNumber(), 0, 'The amount was successfully deducted from the allowance')
 
-        // // Ensure that spender can spend from the allowance
-        // successReceipt = await token.transferFrom(fromAccount, toAccount, 5, {
-        //     from: spendingAccount
-        // })
-        // assert.equal(successReceipt.logs[0].args._value.toNumber(), 5, 'Spender has spent 5 NZT Tokens')
-
-        // // toBalance = await token.balanceOf(toAccount);
-        // // assert.equal(toBalance.toNumber(), 5, 'toAccount was credited with 5 NZT Tokens')
-
     });
 
 });

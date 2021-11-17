@@ -21,9 +21,9 @@ module.exports = {
     //  network_id: "*",       // Any network (default: none)
     // },
     ganache: {
-      host: "127.0.0.1",     // Ganache RPC Server (default: none)
-      port: 7545,            // Current Ganache Instance port (default: none)
-      network_id: 5777,      // Current Ganache Instance network ID (default: none)
+      host: "127.0.0.1", // Ganache RPC Server (default: none)
+      port: 7545, // Current Ganache Instance port (default: none)
+      network_id: 5777, // Current Ganache Instance network ID (default: none)
     },
     // Another network with more advanced options...
     // advanced: {
@@ -60,7 +60,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.9",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.9", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -83,13 +83,13 @@ module.exports = {
   // $ truffle migrate --reset --compile-all
   //
   // db: {
-    // enabled: false,
-    // host: "127.0.0.1",
-    // adapter: {
-    //   name: "sqlite",
-    //   settings: {
-    //     directory: ".db"
-    //   }
-    // }
+  // enabled: false,
+  // host: "127.0.0.1",
+  // adapter: {
+  //   name: "sqlite",
+  //   settings: {
+  //     directory: ".db"
+  //   }
+  // }
   // }
 };
