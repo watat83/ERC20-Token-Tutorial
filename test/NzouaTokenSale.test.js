@@ -184,3 +184,124 @@ contract('NzouaTokenSale - Successful Transfer', async (accounts) => {
 
     });
 })
+
+contract('NzouaTokenSale - End Token Sale', async (accounts) => {
+    let tokenSale;
+    let token;
+    let tokenPrice = 1000000000000000; // in wei
+    const adminAccount = accounts[0];
+    const buyerAccount = accounts[1];
+    const tokensAvailable = 750000;
+
+    beforeEach("setup all contracts", async () => {
+        token = await NzouaToken.deployed();
+        tokenSale = await NzouaTokenSale.deployed();
+    });
+
+    it('Cannot end token sale from account other than admin', async () => {
+        try {
+            const receipt = await tokenSale.endSale({
+                from: buyerAccount
+            })
+            assert.equal(receipt, false, 'Buyer can end the crowd sale')
+
+        } catch (error) {
+            // console.log(error.message)
+            assert(error.message.indexOf('revert') >= 0, 'Buyer cannot end the crowd sale');
+        }
+    })
+    it('Ends the token sale from Admin', async () => {
+        const receipt = await tokenSale.endSale.call({
+            from: adminAccount
+        })
+        assert(receipt, 'Buyer can end the crowd sale')
+
+    })
+    it('Sends remaining tokens back to Admin', async () => {
+        let tokenSaleBalance;
+        let adminBalance;
+
+        const numberOfTokens = 10;
+        const tokensAvailable = 750000;
+
+        // Provisions Token Sale Contracts with Funds
+        await token.transfer(tokenSale.address, (tokensAvailable), {
+            from: adminAccount
+        })
+
+        // Simulate buyTokens() by a Buyer
+        await tokenSale.buyTokens(numberOfTokens, {
+            from: buyerAccount,
+            value: numberOfTokens * tokenPrice
+        });
+
+        // End the token sale
+        await tokenSale.endSale({
+            from: adminAccount
+        })
+
+        // Grab the new balance of the adminAccount
+        adminBalance = await token.balanceOf(adminAccount);
+        adminBalance = adminBalance.toNumber();
+
+
+        // Confirm the unsold tokens were returned to the admin
+        assert.equal(adminBalance, 999990, 'Returns unsold tokens');
+    })
+    // it('Disables the token sale contract', async () => {
+
+    //     // Provisions Token Sale Contracts with Funds
+    //     await token.transfer(tokenSale.address, (tokensAvailable), {
+    //         from: adminAccount
+    //     })
+
+    //     // End the token sale
+    //     await tokenSale.endSale({
+    //         from: adminAccount
+    //     })
+
+    //     // Get the current balance of the token sale contract
+    //     newBalance = await token.balanceOf(tokenSale.address);
+
+    //     // Confirm that the balance of the contract was reset after deactivation
+    //     assert.equal(newBalance.toNumber(), 0, 'Balance was reset. Contract is disabled')
+    // })
+
+})
+
+contract('NzouaTokenSale - Deactivation', async (accounts) => {
+    let tokenSale;
+    let token;
+    const adminAccount = accounts[0];
+    const tokensAvailable = 750000;
+
+    beforeEach("setup all contracts", async () => {
+        token = await NzouaToken.deployed();
+        tokenSale = await NzouaTokenSale.deployed();
+    });
+
+    it('Disables the token sale contract', async () => {
+
+        // Provisions Token Sale Contracts with Funds
+        await token.transfer(tokenSale.address, (tokensAvailable), {
+            from: adminAccount
+        })
+
+        // Get the old balance of the token sale contract
+        oldBalance = await token.balanceOf(tokenSale.address);
+
+        // End the token sale
+        await tokenSale.endSale({
+            from: adminAccount
+        })
+
+        // Get the new balance of the token sale contract
+        newBalance = await token.balanceOf(tokenSale.address);
+
+        // Confirm that both old and new balances of the contract have different values
+        assert.notEqual(oldBalance.toNumber(), newBalance.toNumber(), 'Both balances are not equal')
+
+        // Confirm that the balance of the contract was reset after deactivation
+        assert.equal(newBalance.toNumber(), 0, 'Balance was reset. Contract is disabled')
+    })
+})

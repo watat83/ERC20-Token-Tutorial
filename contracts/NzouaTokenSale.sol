@@ -65,6 +65,20 @@ contract NzouaTokenSale {
 
     }
 
+    // Ending the NzouaTokenSale sale
+    function endSale() public {
+
+        // Require only admin can end the sale
+        require(msg.sender == admin, 'Only Admin can end the sale');
+
+        // Transfer remaining tokens back to admin
+        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+
+        // Destroy/Deactivate the contract
+        // selfdestruct(payable(admin));
+
+    }
+
 
     // Function to get address of admin
     // function getAdmin() public view returns (address) {    
