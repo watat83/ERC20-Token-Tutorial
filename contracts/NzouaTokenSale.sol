@@ -75,7 +75,7 @@ contract NzouaTokenSale {
         require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
 
         // Destroy/Deactivate the contract
-        // selfdestruct(payable(admin));
+        selfdestruct(payable(admin));
 
     }
 
